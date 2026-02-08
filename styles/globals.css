@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-base text-white antialiased;
+}
+
+.gradient-card {
+  background: linear-gradient(145deg, rgba(124, 92, 255, 0.2), rgba(124, 92, 255, 0));
+}

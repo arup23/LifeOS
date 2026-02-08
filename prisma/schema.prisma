@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum QuestDifficulty {
+  EASY
+  MODERATE
+  HARD
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  checkIns  CheckIn[]
+  quests    Quest[]
+  habits    Habit[]
+  blocks    CalendarBlock[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  quests    Quest[]
+  habits    Habit[]
+}
+
+model CheckIn {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  sleep      Int
+  energy     Int
+  mood       String
+  focusHours Float
+  stress     Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+model Quest {
+  id          String          @id @default(uuid())
+  title       String
+  xp          Int
+  estimateMin Int
+  difficulty  QuestDifficulty
+  recovery    Boolean @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+}
+
+model Habit {
+  id          String   @id @default(uuid())
+  title       String
+  target      String
+  progress    Float
+  recovery    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+}
+
+model CalendarBlock {
+  id        String   @id @default(uuid())
+  title     String
+  startsAt  DateTime
+  endsAt    DateTime
+  xp        Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+}
